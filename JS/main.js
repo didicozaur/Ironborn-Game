@@ -9,13 +9,18 @@ function createDomElement(className) {
 }
 
 function drawDomElement(instance) {
-  instance.domElement.style.left = instance.positionX + "%";
-  instance.domElement.style.bottom = instance.positionY + "%";
+  instance.domElement.style.width = instance.width + "vw";
+  instance.domElement.style.height = instance.height + "vh";
+
+  instance.domElement.style.left = instance.positionX + "vw";
+  instance.domElement.style.bottom = instance.positionY + "vh";
 }
 
+/* Start game */
 const game = new Game(createDomElement, drawDomElement);
 game.start();
 
+/* Event listeners */
 document.addEventListener("keydown", function (event) {
   switch (event.key) {
     case "ArrowRight":
