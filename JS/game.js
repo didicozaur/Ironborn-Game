@@ -14,6 +14,10 @@ class Game {
     this.player.domElement = this.create("player"); //create a dom element with the class "player"
     this.draw(this.player);
 
+    this.runGame();
+  }
+
+  runGame() {
     this.intervaId = setInterval(() => {
       // move obstacles
       this.obstacles.forEach((obstacle) => {
@@ -41,16 +45,25 @@ class Game {
       this.player.positionY < obstacle.positionY + obstacle.height &&
       this.player.height + this.player.positionY > obstacle.positionY
     ) {
-      console.log("game over");
-      clearInterval(this.intervaId);
+      // Collision detected !
+      this.removeObstacle(obstacle); // remove the obstacle
+      clearInterval(this.intervaId); // stop/pause game
+
+      setTimeout(() => {
+        this.runGame(); // continue game
+      }, 3000);
     }
   }
 
   detectObstacleOutside(obstacle) {
     if (obstacle.positionY < 0) {
-      this.obstacles.shift(); // remove from array
-      obstacle.domElement.remove(); // remove from the dom
+      this.removeObstacle(obstacle);
     }
+  }
+
+  removeObstacle(obstacle) {
+    this.obstacles.shift(); // remove from array
+    obstacle.domElement.remove(); // remove from the dom
   }
 
   movePlayer(direction) {
