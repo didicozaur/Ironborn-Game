@@ -1,8 +1,9 @@
 class Game {
   constructor(create, draw) {
     this.time = 0;
+    this.intervaId = null;
     this.player = null;
-    this.obstacles = [];
+    this.obstacles = []; // array of instances of the class Obstacle
     this.create = create;
     this.draw = draw;
   }
@@ -13,7 +14,7 @@ class Game {
     this.player.domElement = this.create("player"); //create a dom element with the class "player"
     this.draw(this.player);
 
-    setInterval(() => {
+    this.intervaId = setInterval(() => {
       // move obstacles
       this.obstacles.forEach((obstacle) => {
         obstacle.moveDown();
@@ -41,12 +42,13 @@ class Game {
       this.player.height + this.player.positionY > obstacle.positionY
     ) {
       console.log("game over");
+      clearInterval(this.intervaId);
     }
   }
+
   detectObstacleOutside(obstacle) {
     if (obstacle.positionY < 0) {
       this.obstacles.shift(); // remove from array
-
       obstacle.domElement.remove(); // remove from the dom
     }
   }
@@ -63,10 +65,10 @@ class Game {
 
 class Player {
   constructor() {
-    this.positionX = 50;
-    this.positionY = 0;
     this.width = 10;
     this.height = 10;
+    this.positionX = 50;
+    this.positionY = 0;
     this.domElement = null;
   }
 
@@ -81,10 +83,10 @@ class Player {
 
 class Obstacle {
   constructor() {
-    this.positionX = 50;
-    this.positionY = 100;
     this.width = 10;
     this.height = 10;
+    this.positionX = Math.floor(Math.random() * (100 - this.width + 1)); // random between 0 and (100-this.width)
+    this.positionY = 100;
     this.domElement = null;
   }
   moveDown() {
